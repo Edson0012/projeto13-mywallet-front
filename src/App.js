@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import ContextApi from "./contextApi/ContextApi.js"
+import Login from "./login/Login.js"
+import Register from "./register/Register.js"
 
 export default function App() {
     const [token, setToken] = useState("");
@@ -10,7 +12,8 @@ export default function App() {
         <ContextApi.Provider value={contextValue}>
             <BrowserRouter>
                 <Routes>
-                    <Route></Route>
+                    <Route path="/" element={<Login />}/>
+                    <Route path="/register" element={<Register />} />
                 </Routes>
             </BrowserRouter>
         </ContextApi.Provider>
