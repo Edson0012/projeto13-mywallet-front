@@ -31,7 +31,7 @@ export default function Login() {
 
         axios
             .post(
-                "http://localhost:5000/",
+                "http://localhost:5000/login",
                 body
             )
             .then((res) => {
@@ -66,7 +66,6 @@ flex-direction: column;
 gap: 3.6rem;
 
     h1 {
-        font-family: 'Saira Stencil One';
         font-style: normal;
         font-weight: 400;
         font-size: 3.1rem;

@@ -12,7 +12,7 @@ export default function App() {
         <ContextApi.Provider value={contextValue}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Login />}/>
+                    <Route path="/login" element={<Login />}/>
                     <Route path="/register" element={<Register />} />
                 </Routes>
             </BrowserRouter>
