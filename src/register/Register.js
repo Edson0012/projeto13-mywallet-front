@@ -1,25 +1,120 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ContextApi from "../contextApi/ContextApi";
+import { ThreeDots } from "react-loader-spinner";
 
 
 
 export default function Register () {
+    const {setToken} = useContext(ContextApi);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState("Cadastrar");
+    const [password2, setPassword2] = useState('')
+    const [form, setForm] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+    const [block, setBlock] = useState(false)
 
+
+    function changeSubmit(event) {
+        event.preventDefault();
+
+        setForm({
+            ...form,
+            [event.target.name]: event.target.value,
+        });
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+       
+        if(
+            form.name === '' ||
+            form.email === "" ||
+            form.password === "" ||
+            password2 === "" 
+        ){
+            alert('preencha todos os campos')
+            return
+        } else if (form.password.length <= 5 ) {
+            alert('a senha deve ter pelomenos 5 digitos')
+            return
+        } else {
+        } 
+
+        if(form.password === password2){
+            setLoading(<ThreeDots color="white" />);
+
+            const body = {
+                name: form.name,
+                email: form.email,
+                password: form.password
+            };
+    
+
+            axios.post(
+                "http://localhost:5000/sign-up",
+                body
+            ).then((res) => {
+                setBlock(true);
+                console.log(res.data)
+                navigate("/sign-in");
+            }).catch((err) => {
+                console.log(err.data)
+                setBlock(true);
+                setLoading('Cadastrar');
+                setBlock(false);
+            });
+        } else {
+            alert('as senhas devem coincidirem')
+            return
+        }
+       
+    }
 
     return (
         <Main>
             <h1>MyWallet</h1>
-            <form>
-                <input type='text' placeholder="Nome"></input>
-                <input type='text' placeholder="E-mail"></input>
-                <input type='text' placeholder="Senha"></input>
-                <input type='text' placeholder="Confirme a senha"></input>
-                <button>Cadastrar</button>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="Nome"
+                    name="name"
+                    value={form.name}
+                    onChange={changeSubmit}
+                    disabled={block}
+                ></input>
+                <input
+                    type="email"
+                    placeholder="E-mail"
+                    name="email"
+                    value={form.email}
+                    onChange={changeSubmit}
+                    disabled={block}
+                ></input>
+                <input
+                    type="password"
+                    placeholder="Senha"
+                    name="password"
+                    value={form.password}
+                    onChange={changeSubmit}
+                    disabled={block}
+                ></input>
+                <input
+                    type="password"
+                    placeholder="Confirme a senha"
+                    name="password2"
+                    value={password2}
+                    onChange={(e) => setPassword2(e.target.value)}
+                    disabled={block}
+                ></input>
+                <button>{loading}</button>
             </form>
-            <h3 onClick={() => navigate('/login')} >Já tem uma conta? Entre agora!</h3>
+            <h3 onClick={() => navigate('/sign-in')} >Já tem uma conta? Entre agora!</h3>
         </Main>
     )
 }

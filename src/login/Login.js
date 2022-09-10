@@ -3,52 +3,66 @@ import axios from "axios"
 import ContextApi from "../contextApi/ContextApi"
 import { useNavigate } from "react-router-dom"
 import { useContext , useState } from "react"
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Login() {
-    const { setUser } = useContext(ContextApi);
-    const navigate = useNavigate()
-    const {account, setAccount} = useState({
-        email: '',
-        password: '',
-    })
-
+    const { setToken } = useContext(ContextApi);
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState("Entrar");
+    const [block, setBlock] = useState(false);
 
 
     function handleSubmit(event) {
         event.preventDefault();
 
-        setAccount({
-            ...account,
-            [event.target.name]: event.target.value,
-        });
-    }
+        if(email === ""){
+           return alert('campo de email vazio')
+        } else if (password === ''){
+           return alert('campo de senha vazio')
+        } else {   
+        }
 
-    function sendForm(event) {
-        event.preventDefault();
+
+        setLoading(<ThreeDots color="white" />);
         const body = {
-            ...account,
+            email,
+            password,
         };
-
         axios
             .post(
-                "http://localhost:5000/login",
+                "http://localhost:5000/sign-in",
                 body
             )
             .then((res) => {
-                setUser(res.data);
-                navigate("/register");
+                setBlock(true)
+                setToken(res.data);
+                navigate('/transaction')
+                console.log(setToken)
+            }).catch((err) => {
+                alert('Email ou senha incorretos')
+                setBlock(true)
+                setLoading('Entrar')
+                setBlock(false)
             });
     }
 
     return (
         <Main>
             <h1>MyWallet</h1>
-            <form>
-                <input type='text' placeholder="E-mail" name="email" onChange={handleSubmit} ></input>
-                <input type="text" placeholder="Senha" name="password" onChange={handleSubmit}></input>
-                <button onClick={sendForm} >Entrar</button>
+            <form onSubmit={handleSubmit}>
+                <input
+                type='email' placeholder="E-mail" name="email" 
+                value={email}  onChange={(e) => setEmail(e.target.value)} disabled={block}>
+                </input>
+                <input
+                type="password" placeholder="Senha" name="password" 
+                value={password} onChange={(e) => setPassword(e.target.value)} disabled={block}>
+                </input>
+                <button>{loading}</button>
             </form> 
-            <h3 onClick={() => navigate('/register')} >Primeira vez? Cadastre-se!</h3>
+            <h3 onClick={() => navigate('/sign-up')} >Primeira vez? Cadastre-se!</h3>
         </Main>
     )
 
