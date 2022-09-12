@@ -10,9 +10,10 @@ import Withdraw from "./newExit/Withdraw.js"
 export default function App() {
     const [token, setToken] = useState("");
     const [name, setName] = useState('');
-    const contextValue = {token, setToken , name , setName}
+    const [userEmail, setUserEmail] = useState('');
+    const contextValue = {token, setToken , name , setName, userEmail, setUserEmail};
 
-    console.log(token);
+    console.log(userEmail)
 
     return (
         <ContextApi.Provider value={contextValue}>

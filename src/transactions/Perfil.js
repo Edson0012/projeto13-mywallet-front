@@ -12,28 +12,7 @@ import axios from "axios"
 export default function Perfil(){
     const { name } = useContext(ContextApi);
     const navigate = useNavigate();
-/* 
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
-    console.log(config)
-
-    useEffect(() => {
-        (async () => {
-        try {
-            const promise =  await axios.get('http://localhost:5000/transaction', config)
-            setName(promise.data.name)
-        }catch(err){
-            console.log(err)
-        }    
-            
-
-        })()
-    }, [])
- */
+    
     return (
         <Main>
             <div>

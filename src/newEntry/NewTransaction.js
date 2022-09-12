@@ -2,8 +2,10 @@ import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import { useState, useContext } from "react";
 import axios from "axios";
+import ContextApi from "../contextApi/ContextApi";
 
 export default function NewTransaction (){
+    const { userEmail } = useContext(ContextApi)
     const navigate = useNavigate();
     const [deposit, setDeposit] = useState({
         value: '',
@@ -24,7 +26,8 @@ export default function NewTransaction (){
     }
 
     const body = {
-        ...deposit
+        ...deposit,
+        email: userEmail,
     };
 
     function handleSubmit(event) {
@@ -37,7 +40,9 @@ export default function NewTransaction (){
         } else {
         }
 
-        axios.post('http://localhost:5000/newEntry', body).then((res)=> {
+        console.log(body)
+
+        axios.post('http://localhost:5000/new-entry', body).then((res)=> {
             setBlock(true)
             console.log(res)
             setBlockButton(true)
@@ -125,6 +130,7 @@ padding: 2.4rem;
             line-height: 2.3rem;
 
             color: #FFFFFF;
+            cursor: pointer;
         }
     }
 

@@ -37,7 +37,7 @@ export default function Withdraw() {
         } else {
         }
 
-        axios.post('http://localhost:5000/newExit', body).then((res)=> {
+        axios.post('http://localhost:5000/new-exit', body).then((res)=> {
             setBlock(true)
             console.log(res)
             setBlockButton(true)
@@ -124,6 +124,7 @@ padding: 2.4rem;
             line-height: 2.3rem;
 
             color: #FFFFFF;
+            cursor: pointer;
         }
     }
 

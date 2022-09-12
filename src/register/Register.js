@@ -40,8 +40,8 @@ export default function Register () {
         ){
             alert('preencha todos os campos')
             return
-        } else if (form.password.length <= 5 ) {
-            alert('a senha deve ter pelomenos 5 digitos')
+        } else if (form.password.length <= 6 ) {
+            alert('a senha deve ter pelomenos 6 digitos')
             return
         } else {
         } 
