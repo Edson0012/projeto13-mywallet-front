@@ -1,16 +1,68 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
+import { useState, useContext } from "react";
+import axios from "axios";
 
 export default function NewTransaction (){
     const navigate = useNavigate();
+    const [deposit, setDeposit] = useState({
+        value: '',
+        description: '',
+    })
+    const [block, setBlock] = useState(false)
+    const [blockButton, setBlockButton] = useState(false)
+
+    function sendChange(event) {
+        event.preventDefault();
+
+        setDeposit({
+            ...deposit,
+            [event.target.name]: event.target.value,
+        });
+
+        console.log(deposit)
+    }
+
+    const body = {
+        ...deposit
+    };
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        if(deposit.value === '' || deposit.value <= 0){
+            return alert('um valor não foi atribuido ')
+        } else if (deposit.description === ''){
+            return alert('deve conter uma descrição')
+        } else {
+        }
+
+        axios.post('http://localhost:5000/newEntry', body).then((res)=> {
+            setBlock(true)
+            console.log(res)
+            setBlockButton(true)
+        }).catch((err) => {
+            setBlock(true)
+            setBlockButton(true)
+            console.log(err)
+            setBlock(false)
+            setBlockButton(false)
+        })
+
+    }
+
 
     return (
         <Main>
             <h2>Nova entrada</h2>
-            <form>
-                <input placeholder="Valor" ></input>
-                <input placeholder="Descrição" ></input>
-                <button onClick={() => navigate('/transaction')} >Salvar entrada</button>
+            <form onSubmit={handleSubmit} >
+                <input type='number' name="value" placeholder="Valor" 
+                value={deposit.value} disabled={block} onChange={sendChange}>
+                </input>
+                <input type='text' placeholder="Descrição" name="description"
+                value={deposit.description} disabled={block} onChange={sendChange}>
+                </input>
+                <button onClick={() => navigate('/transaction')} disabled={blockButton} >Salvar entrada</button>
             </form>
         </Main>
     )

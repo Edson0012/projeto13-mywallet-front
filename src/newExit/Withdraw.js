@@ -1,15 +1,67 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import axios from "axios"
 
 export default function Withdraw() {
     const navigate = useNavigate();
+    const [withdrawal, setWithdrawal] = useState({
+        value: '',
+        description: '',
+    })
+    const [block, setBlock] = useState(false)
+    const [blockbutton, setBlockButton] = useState(false)
+
+    function sendChange(event) {
+        event.preventDefault();
+
+        setWithdrawal({
+            ...withdrawal,
+            [event.target.name]: event.target.value,
+        });
+
+        console.log(withdrawal)
+    }
+
+    const body = {
+        ...withdrawal
+    };
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        if(withdrawal.value === '' || withdrawal.value <= 0){
+            return alert('um valor não foi atribuido ')
+        } else if (withdrawal.description === ''){
+            return alert('deve conter uma descrição')
+        } else {
+        }
+
+        axios.post('http://localhost:5000/newExit', body).then((res)=> {
+            setBlock(true)
+            console.log(res)
+            setBlockButton(true)
+        }).catch((err) => {
+            setBlock(true)
+            setBlockButton(true)
+            console.log(err)
+            setBlock(false)
+            setBlockButton(false)
+        })
+
+    }
+
     return (
         <Main>
             <h2>Nova saída</h2>
-            <form>
-                <input placeholder="Valor" ></input>
-                <input placeholder="Descrição" ></input>
-                <button onClick={() => navigate('/transaction')} >Salvar saída</button>
+            <form onSubmit={handleSubmit} >
+                <input type='number' min='1' name="value" value={withdrawal.value} placeholder="Valor" 
+                onChange={sendChange} disabled={block}
+                ></input>
+                <input type='text' name="description" value={withdrawal.description} placeholder="Descrição"
+                onChange={sendChange} disabled={block}
+                ></input>
+                <button onClick={() => navigate('/transaction')} disabled={blockbutton} >Salvar saída</button>
             </form>
         </Main>
     )

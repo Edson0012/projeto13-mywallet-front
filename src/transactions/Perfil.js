@@ -4,18 +4,40 @@ import Board from "../transactions/Transaction.js"
 import {IoMdAddCircleOutline as Add} from "react-icons/io"
 import { MdOutlineRemoveCircleOutline  as Remove} from "react-icons/md"
 import { useNavigate } from "react-router-dom"
-
+import { useEffect, useContext, useState } from "react"
+import ContextApi from "../contextApi/ContextApi.js"
+import axios from "axios"
 
 
 export default function Perfil(){
-
+    const { name } = useContext(ContextApi);
     const navigate = useNavigate();
+/* 
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
 
+    console.log(config)
 
+    useEffect(() => {
+        (async () => {
+        try {
+            const promise =  await axios.get('http://localhost:5000/transaction', config)
+            setName(promise.data.name)
+        }catch(err){
+            console.log(err)
+        }    
+            
+
+        })()
+    }, [])
+ */
     return (
         <Main>
             <div>
-                <h1>Olá, Fulano</h1>
+                <h1>Ola, {name}</h1>
                 <Logout size={25} color='#FFFFFF' onClick={() => navigate('/sign-in')} />
             </div>
             <Board />

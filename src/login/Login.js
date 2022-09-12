@@ -6,7 +6,7 @@ import { useContext , useState } from "react"
 import { ThreeDots } from "react-loader-spinner";
 
 export default function Login() {
-    const { setToken } = useContext(ContextApi);
+    const { token, setToken, name, setName } = useContext(ContextApi);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -37,9 +37,9 @@ export default function Login() {
             )
             .then((res) => {
                 setBlock(true)
-                setToken(res.data);
+                setToken(res.data.token);
+                setName(res.data.name)
                 navigate('/transaction')
-                console.log(setToken)
             }).catch((err) => {
                 alert('Email ou senha incorretos')
                 setBlock(true)
