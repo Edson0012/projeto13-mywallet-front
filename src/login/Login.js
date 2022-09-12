@@ -6,7 +6,7 @@ import { useContext , useState } from "react"
 import { ThreeDots } from "react-loader-spinner";
 
 export default function Login() {
-    const { setUserEmail, setToken, setName } = useContext(ContextApi);
+    const { setUserEmail, setToken, setName, setBalance } = useContext(ContextApi);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -32,7 +32,7 @@ export default function Login() {
         };
         axios
             .post(
-                "http://localhost:5000/sign-in",
+                "http://localhost:5000/",
                 body
             )
             .then((res) => {
@@ -40,6 +40,7 @@ export default function Login() {
                 setToken(res.data.token);
                 setName(res.data.name);
                 setUserEmail(res.data.email);
+                setBalance(res.data.balance)
                 navigate('/transaction')
             }).catch((err) => {
                 alert('Email ou senha incorretos')

@@ -5,7 +5,7 @@ import axios from "axios";
 import ContextApi from "../contextApi/ContextApi";
 
 export default function NewTransaction (){
-    const { userEmail } = useContext(ContextApi)
+    const { userEmail, token } = useContext(ContextApi)
     const navigate = useNavigate();
     const [deposit, setDeposit] = useState({
         value: '',
@@ -13,26 +13,23 @@ export default function NewTransaction (){
     })
     const [block, setBlock] = useState(false)
     const [blockButton, setBlockButton] = useState(false)
+    
 
-    function sendChange(event) {
-        event.preventDefault();
-
-        setDeposit({
-            ...deposit,
-            [event.target.name]: event.target.value,
-        });
-
-        console.log(deposit)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     }
 
     const body = {
         ...deposit,
         email: userEmail,
+        type: 'entry'
     };
-
+    
     function handleSubmit(event) {
         event.preventDefault();
-
+        
         if(deposit.value === '' || deposit.value <= 0){
             return alert('um valor não foi atribuido ')
         } else if (deposit.description === ''){
@@ -40,12 +37,12 @@ export default function NewTransaction (){
         } else {
         }
 
-        console.log(body)
 
-        axios.post('http://localhost:5000/new-entry', body).then((res)=> {
+        axios.post('http://localhost:5000/transaction', body, config).then((res)=> {
             setBlock(true)
             console.log(res)
             setBlockButton(true)
+            navigate('/transaction')
         }).catch((err) => {
             setBlock(true)
             setBlockButton(true)
@@ -53,6 +50,16 @@ export default function NewTransaction (){
             setBlock(false)
             setBlockButton(false)
         })
+
+    }
+    
+    function sendChange(event) {
+        event.preventDefault();
+
+        setDeposit({
+            ...deposit,
+            [event.target.name]: event.target.value,
+        });
 
     }
 
@@ -67,7 +74,7 @@ export default function NewTransaction (){
                 <input type='text' placeholder="Descrição" name="description"
                 value={deposit.description} disabled={block} onChange={sendChange}>
                 </input>
-                <button onClick={() => navigate('/transaction')} disabled={blockButton} >Salvar entrada</button>
+                <button type="submit" disabled={blockButton} >Salvar entrada</button>
             </form>
         </Main>
     )

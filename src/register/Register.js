@@ -61,10 +61,8 @@ export default function Register () {
                 body
             ).then((res) => {
                 setBlock(true);
-                console.log(res.data)
                 navigate("/sign-in");
             }).catch((err) => {
-                console.log(err.data)
                 setBlock(true);
                 setLoading('Cadastrar');
                 setBlock(false);

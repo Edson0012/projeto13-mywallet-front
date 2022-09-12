@@ -1,9 +1,11 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios"
+import ContextApi from "../contextApi/ContextApi";
 
 export default function Withdraw() {
+    const { userEmail, token } = useContext(ContextApi)
     const navigate = useNavigate();
     const [withdrawal, setWithdrawal] = useState({
         value: '',
@@ -20,12 +22,19 @@ export default function Withdraw() {
             [event.target.name]: event.target.value,
         });
 
-        console.log(withdrawal)
     }
 
     const body = {
-        ...withdrawal
+        ...withdrawal,
+        email: userEmail,
+        type: 'exit',
     };
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -37,14 +46,13 @@ export default function Withdraw() {
         } else {
         }
 
-        axios.post('http://localhost:5000/new-exit', body).then((res)=> {
+        axios.post('http://localhost:5000/transaction', body, config).then((res)=> {
             setBlock(true)
-            console.log(res)
             setBlockButton(true)
+            navigate('/transaction')
         }).catch((err) => {
             setBlock(true)
             setBlockButton(true)
-            console.log(err)
             setBlock(false)
             setBlockButton(false)
         })
@@ -61,7 +69,7 @@ export default function Withdraw() {
                 <input type='text' name="description" value={withdrawal.description} placeholder="Descrição"
                 onChange={sendChange} disabled={block}
                 ></input>
-                <button onClick={() => navigate('/transaction')} disabled={blockbutton} >Salvar saída</button>
+                <button type="submit" >Salvar saída</button>
             </form>
         </Main>
     )

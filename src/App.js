@@ -11,15 +11,15 @@ export default function App() {
     const [token, setToken] = useState("");
     const [name, setName] = useState('');
     const [userEmail, setUserEmail] = useState('');
-    const contextValue = {token, setToken , name , setName, userEmail, setUserEmail};
+    const [balance , setBalance] = useState();
+    const contextValue = {token, setToken , name , setName, userEmail, setUserEmail, balance, setBalance};
 
-    console.log(userEmail)
 
     return (
         <ContextApi.Provider value={contextValue}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/sign-in" element={<Login />}/>
+                    <Route path="/" element={<Login />}/>
                     <Route path="/sign-up" element={<Register />} />
                     <Route path="/transaction" element={<Perfil />} />
                     <Route path="/new-entry" element={<NewTransaction />} />
